@@ -1,0 +1,115 @@
+package classwork;
+
+//***************************************************
+// Purpose:PART I. MATRIX ADDITION AND MULTIPLICATION
+// Name: Ahil Mirza
+// Class: CSIT 170
+// Date: 12/10/2023
+//***************************************************
+
+import java.util.Scanner;
+import java.util.Random;
+
+public class MatrixOperations {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        while (true) {
+            System.out.println("Choose an option:");
+            System.out.println("1. Add two matrices");
+            System.out.println("2. Multiply two matrices");
+            System.out.println("3. Quit");
+
+            int choice = scanner.nextInt();
+
+            if (choice == 1 || choice == 2) {
+                System.out.print("Enter the number of rows for Matrix A: ");
+                int rowsA = scanner.nextInt();
+                System.out.print("Enter the number of columns for Matrix A: ");
+                int colsA = scanner.nextInt();
+                System.out.print("Enter the number of rows for Matrix B: ");
+                int rowsB = scanner.nextInt();
+                System.out.print("Enter the number of columns for Matrix B: ");
+                int colsB = scanner.nextInt();
+
+                if ((choice == 1 && (rowsA != rowsB || colsA != colsB)) ||
+                    (choice == 2 && colsA != rowsB)) {
+                    System.out.println("Error: Matrices cannot be added/multiplied. Invalid sizes.");
+                    continue;
+                }
+
+                int[][] matrixA = generateMatrix(rowsA, colsA, random);
+                int[][] matrixB = generateMatrix(rowsB, colsB, random);
+
+                printMatrix(matrixA, "Matrix A");
+                printMatrix(matrixB, "Matrix B");
+
+                if (choice == 1) {
+                    int[][] resultMatrix = addMatrices(matrixA, matrixB);
+                    printMatrix(resultMatrix, "Resulting Matrix (A + B)");
+                } else if (choice == 2) {
+                    int[][] resultMatrix = multiplyMatrices(matrixA, matrixB);
+                    printMatrix(resultMatrix, "Resulting Matrix (A * B)");
+                }
+            } else if (choice == 3) {
+                System.out.println("Exiting the program.");
+                break;
+            } else {
+                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+            }
+        }
+    }
+
+    private static int[][] generateMatrix(int rows, int cols, Random random) {
+        int[][] matrix = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = random.nextInt(101);
+            }
+        }
+        return matrix;
+    }
+
+    private static void printMatrix(int[][] matrix, String label) {
+        System.out.println(label + ":");
+        for (int[] row : matrix) {
+            for (int value : row) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    private static int[][] addMatrices(int[][] matrixA, int[][] matrixB) {
+        int rows = matrixA.length;
+        int cols = matrixA[0].length;
+        int[][] resultMatrix = new int[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                resultMatrix[i][j] = matrixA[i][j] + matrixB[i][j];
+            }
+        }
+
+        return resultMatrix;
+    }
+
+    private static int[][] multiplyMatrices(int[][] matrixA, int[][] matrixB) {
+        int rowsA = matrixA.length;
+        int colsA = matrixA[0].length;
+        int colsB = matrixB[0].length;
+        int[][] resultMatrix = new int[rowsA][colsB];
+
+        for (int i = 0; i < rowsA; i++) {
+            for (int j = 0; j < colsB; j++) {
+                for (int k = 0; k < colsA; k++) {
+                    resultMatrix[i][j] += matrixA[i][k] * matrixB[k][j];
+                }
+            }
+        }
+
+        return resultMatrix;
+    }
+}
